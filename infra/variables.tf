@@ -1,7 +1,7 @@
 # Variables Configuration
 
 variable "cluster-name" {
-  default     = "eks-cluster-sample-app"
+  default     = "eks-sample-app"
   type        = string
   description = "The name of your EKS Cluster"
 }

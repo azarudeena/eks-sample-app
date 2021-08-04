@@ -16,7 +16,7 @@ terraform {
 
 
 module "eks" {
-  source = "eks"
+  source = "./eks"
 
   aws-region          = var.aws-region
   availability-zones  = var.availability-zones
