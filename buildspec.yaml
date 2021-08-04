@@ -11,11 +11,15 @@ phases:
   pre_build:
     commands:
       - TAG="$REPOSITORY_NAME.$REPOSITORY_BRANCH.$ENVIRONMENT_NAME.$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
-      - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY_URI:$TAG"'@' ./sample-app/sample-app.yaml
+      - path=`pwd`
+      - cd sample-app
+      - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY_URI:$TAG"'@' sample-app.yaml
+      - cd path
       - $(aws ecr get-login --no-include-email)
       - export KUBECONFIG=$HOME/.kube/config
   build:
     commands:
+      - cd sample-app
       - docker build --tag $REPOSITORY_URI:$TAG .
 
   post_build:
@@ -27,7 +31,8 @@ phases:
       - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
       - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
       - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
-      - kubectl apply -f ./sample-app/sample-app.yaml
+      - cd sample-app
+      - kubectl apply -f sample-app.yaml
       - printf '[{"name":"sample-app","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json
 artifacts:
   files: build.json
