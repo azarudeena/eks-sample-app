@@ -6,4 +6,4 @@ cd ../infra/
 
 terraform init
 terraform plan -destroy
-terraform destroy
+terraform destroy --auto-approve
