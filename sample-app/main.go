@@ -15,7 +15,7 @@ func main() {
 
 		f := fibonacci()
 
-		res := &response{Message: "Hello PayConiq"}
+		res := &response{Message: "Hello Azar!!"}
 
 		for _, e := range os.Environ() {
 			pair := strings.Split(e, "=")

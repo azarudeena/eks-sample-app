@@ -20,4 +20,4 @@ ROLE="    - rolearn: arn:aws:iam::${ACCOUNT_ID}:role/CodePipelineKubectlRole\n  
 kubectl get -n kube-system configmap/aws-auth -o yaml | awk "/mapRoles: \|/{print;print \"$ROLE\";next}1" > /tmp/aws-auth-patch.yml
 kubectl patch configmap/aws-auth -n kube-system --patch "$(cat /tmp/aws-auth-patch.yml)"
 
-aws cloudformation deploy --template-file ./cicd-cloudformation/cicd-codepipeline.yaml --stack-name eks-codepipeline --parameter-overrides GitHubUser=azarudeena --parameter-overrides GitHubToken=$GITHUB_TOKEN
+aws cloudformation deploy --template-file cicd-cloudformation/cicd-codepipeline.yaml --stack-name eks-codepipeline  --capabilities CAPABILITY_IAM --parameter-overrides GitHubUser=azarudeena GitHubToken=$GITHUB_TOKEN
